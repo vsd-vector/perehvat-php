@@ -39,9 +39,9 @@ if(empty($blocked)) {
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
 		                ROUND(speed, 1) as speed, is_prey, accuracy 
 		         FROM markers M 
-		WHERE game = ? AND is_prey = ? AND last_activity > ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)";
+		WHERE game = ? AND is_prey = ? AND TIME_TO_SEC(TIMEDIFF(?, last_activity)) < ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)";
 		$q = $conn->prepare($stmt);
-		$q->execute(array($now_time, $_GET['game'], '1', $update_age));
+		$q->execute(array($now_time, $_GET['game'], '1', $now_time, $update_age));
 		$result = $q->setFetchMode(PDO::FETCH_ASSOC);
 		$result = $q->fetchAll();
 
@@ -49,9 +49,9 @@ if(empty($blocked)) {
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
 		                ROUND(speed, 1) as speed, is_prey, accuracy
 		         FROM markers M 
-		         WHERE game = ? AND last_activity > ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)";
+		         WHERE game = ? AND TIME_TO_SEC(TIMEDIFF(?, last_activity)) < ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)";
 		$q = $conn->prepare($stmt);
-		$q->execute(array($now_time,$_GET['game'], $update_age));
+		$q->execute(array($now_time,$_GET['game'], $now_time, $update_age));
 		$result = $q->setFetchMode(PDO::FETCH_ASSOC);
 		$result = $q->fetchAll();
 	}
