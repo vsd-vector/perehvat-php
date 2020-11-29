@@ -3,8 +3,8 @@ header('Access-Control-Allow-Origin: *');
 require 'db.php';
 require 'check_password.php';
 
-# get markers only if last_activity < 30 minutes
-$update_age = 60 * 30;
+# get markers only if last_activity < 10 minutes
+$update_age = 60 * 10;
 $tz = 'Europe/Riga'; //timezone
 
 $dt = new DateTime("now", new DateTimeZone($tz)); //now time
