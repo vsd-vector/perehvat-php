@@ -6,8 +6,8 @@ require 'db.php';
 require 'check_password.php';
 require 'check_admin.php';
 
-$sth = $conn->prepare("UPDATE games SET radius = ? WHERE name = ?");
-$sth->execute(array($_POST['radius'],$_POST['game']));
+$sth = $conn->prepare("UPDATE games SET radius = ?, game_type = ? WHERE name = ?");
+$sth->execute(array($_POST['radius'],$_POST['game_type'],$_POST['game']));
 
 
 ?>

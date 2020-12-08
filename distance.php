@@ -8,6 +8,13 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 require 'db.php';
 require 'check_password.php';
 
+# get markers only if last_activity < 20 minutes
+$update_age = 60 * 20;
+$tz = 'Europe/Riga'; //timezone
+
+$dt = new DateTime("now", new DateTimeZone($tz)); //now time
+$now_time = $dt->format("Y-m-d H:i:s");
+
 $stmt = "SELECT geolocation_lat, geolocation_lng FROM markers WHERE game = ? AND id = ?";
 $q = $conn->prepare($stmt);
 $q->execute(array($_GET['game'],$_GET['id']));
@@ -24,11 +31,11 @@ $stmt = "SELECT
    * cos( radians(`geolocation_lng`) - radians(?)) + sin(radians(?)) 
    * sin( radians(`geolocation_lat`)))) AS distance 
 FROM markers M
-WHERE is_prey = 0 AND game = ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)
+WHERE is_prey = 0 AND TIME_TO_SEC(TIMEDIFF(?, last_activity)) < ? AND game = ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)
 HAVING distance < ?
 LIMIT 1";
 $q = $conn->prepare($stmt);
-$q->execute(array($prey_lat, $prey_lng, $prey_lat, $_GET['game'], $radius));
+$q->execute(array($prey_lat, $prey_lng, $prey_lat, $now_time, $update_age, $_GET['game'], $radius));
 $result = $q->setFetchMode(PDO::FETCH_ASSOC);
 $result = $q->fetch();
 

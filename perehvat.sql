@@ -68,7 +68,8 @@ CREATE TABLE `games` (
   `waiting_time` int(2) NOT NULL DEFAULT '10',
   `start_time` int(11) NOT NULL DEFAULT '0',
   `end_game` tinyint(1) NOT NULL DEFAULT '1',
-  `radius` bigint(20) NOT NULL DEFAULT '2000000'
+  `radius` bigint(20) NOT NULL DEFAULT '2000000',
+  `game_type` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 

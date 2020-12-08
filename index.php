@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin: *');  
 require 'db.php';
 require 'check_password.php';
+require 'utils.php';
 
 # get markers only if last_activity < 10 minutes
 $update_age = 60 * 10;
@@ -29,12 +30,8 @@ $blocked = $q->fetch();
 if($my_info['updated'] == '0') {
 	$blocked = $_GET['id'];
 } 
-if(empty($blocked)) {	
-	$stmt = "SELECT creator, game_time, waiting_time, start_time, end_game, radius FROM games WHERE name = ?";
-    $q = $conn->prepare($stmt);
-    $q->execute(array($_GET['game']));
-    $game_info = $q->setFetchMode(PDO::FETCH_ASSOC);
-    $game_info = $q->fetch();	
+if(empty($blocked)) {		
+    $game_info = get_game_info($_GET["game"]);
 
 	if ($my_info['is_prey'] == '1') {
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
@@ -65,7 +62,13 @@ if(empty($blocked)) {
 	$x = array();
     
 	foreach ($result as $key => $array) {
-		if (intval($array['distance']) > $game_info["radius"] && $array['is_prey'] == '1') {
+		if ((intval($array['distance']) > $game_info["radius"]  // if marker is outside radius
+		       || $game_info["state"] == "waiting") // or game is in waiting state
+			&& $array['is_prey'] == '1' // and marker is prey
+			&& $array['id'] != $_GET["id"] // user should see himself even if he is prey
+			&& $game_info["game_type"] == "1" // if is new game version
+		    ) {
+			// then hide the prey marker
 			$distance_to_prey = intval($array['distance']);
 		} else {
 			$x[$array['id']] = $array;
