@@ -70,6 +70,7 @@ if(empty($blocked)) {
 		    ) {
 			// then hide the prey marker
 			$distance_to_prey = intval($array['distance']);
+			$prey_marker_age = intval($array['last_activity']);
 		} else {
 			$x[$array['id']] = $array;
 			$x[$array['id']]['geolocation_lat'] = floatval($array['geolocation_lat']);
@@ -82,12 +83,13 @@ if(empty($blocked)) {
 				$x[$array['id']]['color'] = "#dd0000";
 				$x[$array['id']]['user_name'] = "Угонщик";
 				$distance_to_prey = intval($array['distance']);
+				$prey_marker_age = intval($array['last_activity']);
 			}
 		}
 	}
 	
 	# my distance to prey
-	$x[$_GET['id']]['distance'] = $distance_to_prey;
+	$x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age);
 
 	$markers = json_encode($x);
 	echo "$markers";
