@@ -69,14 +69,21 @@ if(empty($blocked)) {
 			&& $game_info["game_type"] == "1" // if is new game version
 		    ) {
 			// then hide the prey marker
-			$distance_to_prey = intval($array['distance']);
+
+            // if game is not in waiting return distance to prey
+			if ($game_info["state"] == "waiting") {
+				$distance_to_prey = 0;
+			} else {
+			    $distance_to_prey = intval($array['distance']);
+		    }
 			$prey_marker_age = intval($array['last_activity']);
+			$prey_speed = floatval($array['speed']);
 		} else {
 			$x[$array['id']] = $array;
 			$x[$array['id']]['geolocation_lat'] = floatval($array['geolocation_lat']);
 			$x[$array['id']]['geolocation_lng'] = floatval($array['geolocation_lng']);
 			$x[$array['id']]['accuracy'] = floatval($array['accuracy']);
-			$x[$array['id']]['last_activity'] = intval($array['last_activity']);		
+			$x[$array['id']]['last_activity'] = intval($array['last_activity']);
 			$x[$array['id']]['color'] = strval($array['color']);
 			$x[$array['id']]['speed'] = floatval($array['speed']);
 			if ($x[$array['id']]['is_prey'] == '1') {
@@ -84,12 +91,13 @@ if(empty($blocked)) {
 				$x[$array['id']]['user_name'] = "Угонщик";
 				$distance_to_prey = intval($array['distance']);
 				$prey_marker_age = intval($array['last_activity']);
+				$prey_speed = floatval($array['speed']);
 			}
 		}
 	}
 	
 	# my distance to prey
-	$x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age);
+	$x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age, "speed" => $prey_speed);
 
 	$markers = json_encode($x);
 	echo "$markers";
