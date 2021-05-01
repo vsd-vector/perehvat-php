@@ -7,7 +7,7 @@ require 'check_password.php';
 require 'check_admin.php';
 
 # get markers only if last_activity < 10 minutes
-$update_age = 60 * 10;
+$update_age = 60 * 60;
 $tz = 'Europe/Riga'; //timezone
 
 $dt = new DateTime("now", new DateTimeZone($tz)); //now time
