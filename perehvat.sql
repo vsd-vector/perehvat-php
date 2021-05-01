@@ -85,6 +85,7 @@ CREATE TABLE `markers` (
   `geolocation_lng` double NOT NULL,
   `last_activity` datetime NOT NULL,
   `speed` double NOT NULL,
+  `avg_speed` double NOT NULL,
   `accuracy` double NOT NULL,
   `game` varchar(50) CHARACTER SET utf8 NOT NULL,
   `is_prey` tinyint(1) NOT NULL DEFAULT '0',
