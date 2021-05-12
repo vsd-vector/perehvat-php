@@ -84,13 +84,51 @@ CREATE TABLE `markers` (
   `geolocation_lat` double NOT NULL,
   `geolocation_lng` double NOT NULL,
   `last_activity` datetime NOT NULL,
-  `speed` double NOT NULL,
-  `avg_speed` double NOT NULL,
+  `speed` double NOT NULL,  
   `accuracy` double NOT NULL,
   `game` varchar(50) CHARACTER SET utf8 NOT NULL,
   `is_prey` tinyint(1) NOT NULL DEFAULT '0',
   `blocked` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `tracks`
+--
+
+CREATE TABLE `tracks` (
+  `id` int(11) NOT NULL,
+  `marker_id` varchar(36) NOT NULL,
+  `user_name` text CHARACTER SET utf8mb4 NOT NULL,
+  `color` text NOT NULL,
+  `geolocation_lat` double NOT NULL,
+  `geolocation_lng` double NOT NULL,
+  `last_activity` datetime NOT NULL,
+  `speed` double NOT NULL,
+  `accuracy` double NOT NULL,
+  `game` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `is_prey` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tracks`
+--
+ALTER TABLE `tracks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tracks`
+--
+ALTER TABLE `tracks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
 --
 -- Table structure for table `users`
