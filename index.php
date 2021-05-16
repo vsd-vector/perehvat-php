@@ -35,7 +35,7 @@ if(empty($blocked)) {
 
 	if ($my_info['is_prey'] == '1') {
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
-		                ROUND(speed, 1) as speed, ROUND(avg_speed, 1) as avg_speed, is_prey, accuracy 
+		                ROUND(speed, 1) as speed, is_prey, accuracy 
 		         FROM markers M 
 		WHERE game = ? AND is_prey = ? AND TIME_TO_SEC(TIMEDIFF(?, last_activity)) < ? AND id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id)";
 		$q = $conn->prepare($stmt);
@@ -45,7 +45,7 @@ if(empty($blocked)) {
 
 	} else {		
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
-		                ROUND(speed, 1) as speed, ROUND(avg_speed, 1) as avg_speed, is_prey, accuracy,
+		                ROUND(speed, 1) as speed, is_prey, accuracy,
 						( 6371000 * acos( cos( radians(?) ) * cos( radians( `geolocation_lat` ) ) 
                           * cos( radians(`geolocation_lng`) - radians(?)) + sin(radians(?)) 
                           * sin( radians(`geolocation_lat`)))) as distance
@@ -85,8 +85,7 @@ if(empty($blocked)) {
 			$x[$array['id']]['accuracy'] = floatval($array['accuracy']);
 			$x[$array['id']]['last_activity'] = intval($array['last_activity']);
 			$x[$array['id']]['color'] = strval($array['color']);
-			$x[$array['id']]['speed'] = floatval($array['speed']);
-			$x[$array['id']]['avg_speed'] = floatval($array['avg_speed']);
+			$x[$array['id']]['speed'] = floatval($array['speed']);			
 			if ($x[$array['id']]['is_prey'] == '1') {
 				$x[$array['id']]['color'] = "#dd0000";
 				$x[$array['id']]['user_name'] = "Угонщик";
