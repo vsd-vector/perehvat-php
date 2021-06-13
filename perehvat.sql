@@ -41,7 +41,7 @@ CREATE TABLE `admins` (
 
 CREATE TABLE `blocked` (
   `id` int(11) NOT NULL,
-  `user_id` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `user_id` varchar(36) CHARACTER SET utf8 NOT NULL,
   `game` varchar(50) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -117,7 +117,10 @@ CREATE TABLE `tracks` (
 -- Indexes for table `tracks`
 --
 ALTER TABLE `tracks`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `game` (`game`),
+  ADD KEY `game_last_activity` (`game`,`last_activity`),
+  ADD KEY `history` (`marker_id`,`last_activity`,`game`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
