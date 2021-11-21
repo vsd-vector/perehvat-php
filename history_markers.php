@@ -81,9 +81,11 @@ if($game_info["state"] == "nogame" && $my_info['is_prey'] != '1') {
 			}
 		}
 	}
-	
+		
 	# my distance to prey
-	$x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age, "speed" => $prey_speed);
+	if (!empty($x)) {
+	    $x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age, "speed" => $prey_speed);
+	}
 
 	$markers = json_encode($x);
 	echo "$markers";
