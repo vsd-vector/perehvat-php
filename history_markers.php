@@ -10,8 +10,11 @@ $update_age = 60 * 10;
 $tz = 'Europe/Riga'; //timezone
 
 $time = $_GET['time'];
+$hide_time = $time - $update_age;
 $dt = new DateTime("@$time", new DateTimeZone($tz)); //now time
 $now_time = $dt->format("Y-m-d H:i:s");
+$dt = new DateTime("@$hide_time", new DateTimeZone($tz)); //now time
+$hide_time = $dt->format("Y-m-d H:i:s");
 
 #am i prey? 
 $stmt = "SELECT is_prey, (TIME_TO_SEC(TIMEDIFF(?, last_activity)) < 120) AS updated,
@@ -31,17 +34,15 @@ if($game_info["state"] == "nogame" && $my_info['is_prey'] != '1') {
 					( 6371000 * acos( cos( radians(?) ) * cos( radians( M.geolocation_lat ) ) 
                       * cos( radians(M.geolocation_lng) - radians(?)) + sin(radians(?)) 
                       * sin( radians(M.geolocation_lat)))) as distance
-	         FROM tracks M 
-	         LEFT OUTER JOIN `tracks` AS H 
-	          ON M.marker_id = H.marker_id AND M.game = H.game AND H.last_activity <= ?
-                AND (M.last_activity < H.last_activity
-                     OR (M.last_activity = H.last_activity AND M.id < H.id))
-	         WHERE M.last_activity <= ? AND M.game = ? AND TIME_TO_SEC(TIMEDIFF(?, M.last_activity)) < ? 	               
+	         FROM tracks M 	         
+	         WHERE M.last_activity <= ? AND M.game = ? AND M.last_activity > ? 	               
 			       AND M.marker_id NOT IN (SELECT user_id FROM blocked B WHERE B.game = M.game AND B.user_id = M.id) 
-			       AND H.last_activity IS NULL";
+			       AND M.id IN (SELECT max(id) from tracks where game=? and last_activity<=? and last_activity>=? GROUP BY marker_id)";    
 	$q = $conn->prepare($stmt);
 	$q->execute(array($now_time, $my_info["geolocation_lat"], $my_info["geolocation_lng"], 
-	                  $my_info["geolocation_lat"], $now_time, $now_time, $_GET['game'], $now_time, $update_age));
+	                  $my_info["geolocation_lat"], 
+	                  $now_time, $_GET['game'], $hide_time,
+	                  $_GET['game'], $now_time, $hide_time));
 	$result = $q->setFetchMode(PDO::FETCH_ASSOC);
 	$result = $q->fetchAll();		
 
@@ -83,7 +84,7 @@ if($game_info["state"] == "nogame" && $my_info['is_prey'] != '1') {
 	}
 		
 	# my distance to prey
-	if (!empty($x)) {
+	if (!empty($x) and isset($x[$_GET['id']])) {
 	    $x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age, "speed" => $prey_speed);
 	}
 
