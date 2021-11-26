@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 header('Access-Control-Allow-Origin: *');  
 require 'db.php';
 require 'check_password.php';
@@ -11,10 +13,10 @@ $tz = 'Europe/Riga'; //timezone
 
 $time = $_GET['time'];
 $hide_time = $time - $update_age;
-$dt = new DateTime("@$time", new DateTimeZone($tz)); //now time
-$now_time = $dt->format("Y-m-d H:i:s");
-$dt = new DateTime("@$hide_time", new DateTimeZone($tz)); //now time
-$hide_time = $dt->format("Y-m-d H:i:s");
+$dt = new DateTime("@$time"); //now time
+$now_time = $dt->setTimezone(new DateTimeZone($tz))->format("Y-m-d H:i:s");
+$dt = new DateTime("@$hide_time"); //hide time
+$hide_time = $dt->setTimezone(new DateTimeZone($tz))->format("Y-m-d H:i:s");
 
 #am i prey? 
 $stmt = "SELECT is_prey, (TIME_TO_SEC(TIMEDIFF(?, last_activity)) < 120) AS updated,
