@@ -79,6 +79,7 @@ if(empty($blocked)) {
 			$prey_marker_age = intval($array['last_activity']);
 			$prey_speed = floatval($array['speed']);
 		} else {
+            
 			$x[$array['id']] = $array;
 			$x[$array['id']]['geolocation_lat'] = floatval($array['geolocation_lat']);
 			$x[$array['id']]['geolocation_lng'] = floatval($array['geolocation_lng']);
@@ -92,12 +93,30 @@ if(empty($blocked)) {
 				$distance_to_prey = intval($array['distance']);
 				$prey_marker_age = intval($array['last_activity']);
 				$prey_speed = floatval($array['speed']);
+				$max_offset = 0;
 			}
+
+			if ($array['is_prey'] == '1' // and marker is prey
+	   		   && $array['id'] != $_GET["id"] // user should see himself accurately even if he is prey
+			   && $game_info["game_type"] == "2" // if is new game version)
+			   ) {
+			   	$max_offset = ($distance_to_prey - get_prey_lockin_distance($_GET['game'])) * get_prey_acc_scale($_GET['game']);
+			   	if ($max_offset < 0) {
+			   		$max_offset = 0;
+			   	}
+			   	// move marker by some random offset
+			    $lat_offset = (rand(0, 2*$max_offset) - $max_offset); // random offset for latitude [-max_offset;max_offset]
+			    $lat_offset = $lat_offset / 111111; // convert to "latitude degrees"
+			    $lng_offset = (rand(0, 2*$max_offset) - $max_offset); // random offset for longtitude [-max_offset;max_offset]
+			    $lng_offset = $lng_offset / (111111 * cos(deg2rad($x[$array['id']]['geolocation_lat']))); // convert to degrees 
+			    $x[$array['id']]['geolocation_lat'] += $lat_offset;
+			    $x[$array['id']]['geolocation_lng'] += $lng_offset;			    
+            }
 		}
 	}
 	
 	# my distance to prey
-	$x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age, "speed" => $prey_speed);
+	$x[$_GET['id']]['prey_info'] = array("distance" => $distance_to_prey, "last_activity" => $prey_marker_age, "speed" => $prey_speed, "max_offset" => $max_offset);
 
 	$markers = json_encode($x);
 	echo "$markers";

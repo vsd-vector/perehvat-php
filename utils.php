@@ -24,6 +24,14 @@ function get_game_state($game) {
       } 
 }
 
+function get_prey_lockin_distance($game_id) {
+  return 500;
+}
+
+function get_prey_acc_scale($game_id) {
+  return 0.6;
+}
+
 function get_game_info($game_id) {
 	global $conn;
 

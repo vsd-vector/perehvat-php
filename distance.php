@@ -7,6 +7,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 require 'db.php';
 require 'check_password.php';
+require 'utils.php';
 
 # get markers only if last_activity < 20 minutes
 $update_age = 60 * 20;
@@ -23,7 +24,7 @@ $result = $q->fetch();
 $prey_lat = $result['geolocation_lat'];
 $prey_lng = $result['geolocation_lng'];
 
-$radius = '500';
+$radius = get_prey_lockin_distance($_GET['game']);
 
 $stmt = "SELECT 
   `user_name`, 
