@@ -66,7 +66,7 @@ if(empty($blocked)) {
 		       || $game_info["state"] == "waiting") // or game is in waiting state
 			&& $array['is_prey'] == '1' // and marker is prey
 			&& $array['id'] != $_GET["id"] // user should see himself even if he is prey
-			&& $game_info["game_type"] == "1" // if is new game version
+			&& $game_info["game_type"] != "0" // if is new game version
 		    ) {
 			// then hide the prey marker
 
@@ -110,7 +110,8 @@ if(empty($blocked)) {
 			    $lng_offset = (rand(0, 2*$max_offset) - $max_offset); // random offset for longtitude [-max_offset;max_offset]
 			    $lng_offset = $lng_offset / (111111 * cos(deg2rad($x[$array['id']]['geolocation_lat']))); // convert to degrees 
 			    $x[$array['id']]['geolocation_lat'] += $lat_offset;
-			    $x[$array['id']]['geolocation_lng'] += $lng_offset;			    
+			    $x[$array['id']]['geolocation_lng'] += $lng_offset;
+			    $x[$array['id']]['accuracy'] = $max_offset*2;
             }
 		}
 	}
