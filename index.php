@@ -33,7 +33,7 @@ if($my_info['updated'] == '0') {
 if(empty($blocked)) {		
     $game_info = get_game_info($_GET["game"]);
 
-	if ($my_info['is_prey'] == '1') {
+	if ($my_info['is_prey'] == '1' && $game_info["state"] == "inprogress") {
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
 		                ROUND(speed, 1) as speed, is_prey, accuracy 
 		         FROM markers M 

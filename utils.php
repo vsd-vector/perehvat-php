@@ -29,7 +29,7 @@ function get_prey_lockin_distance($game_id) {
 }
 
 function get_prey_acc_scale($game_id) {
-  return 0.6;
+  return 0.8;
 }
 
 function get_game_info($game_id) {
