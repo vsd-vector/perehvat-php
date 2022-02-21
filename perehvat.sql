@@ -24,6 +24,24 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `setting` varchar(20) NOT NULL,
+  `value` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`setting`, `value`) VALUES
+('map_visible', 1);
+COMMIT;
+
 --
 -- Table structure for table `admins`
 --
@@ -112,6 +130,14 @@ CREATE TABLE `tracks` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`setting`);
+COMMIT;
+
 
 --
 -- Indexes for table `tracks`
