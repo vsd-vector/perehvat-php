@@ -3,6 +3,7 @@ $servername = "localhost";
 $username = "perehvat";
 $password = "password";
 $db = "perehvat";
+$history_password = "password used for requesting history and settings";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$db;charset=utf8mb4", $username, $password);
