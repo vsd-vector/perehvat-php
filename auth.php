@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    session_start();
+    session_start(array("cookie_samesite"=>"none", "cookie_secure"=>"1"));
 	if ($_POST['password'] == sha1($history_password)) {
 		$_SESSION["user"] = array("type" => "admin");
 	}
