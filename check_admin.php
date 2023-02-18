@@ -1,5 +1,6 @@
 <?php
 require_once 'db.php';
+require_once 'utils.php';
 
 if (!empty($_POST)) {
 	$id = $_POST['id'];
@@ -9,15 +10,21 @@ if (!empty($_POST)) {
 	$game = $_GET['game'];
 }
 
-$stmt = "SELECT user_id FROM admins WHERE user_id = ? AND game = ?";
-$q = $conn->prepare($stmt);
-$q->execute(array($id, $game));
-$result = $q->setFetchMode(PDO::FETCH_ASSOC);
-$result = $q->fetch();
+$user = check_super_admin();
 
-if (empty($result)) {
-	http_response_code(403);
-	exit();
+if ( $user["type"] == "admin" ) {
+	// we are super-admin! no need to check password
+} else {
+	$stmt = "SELECT user_id FROM admins WHERE user_id = ? AND game = ?";
+	$q = $conn->prepare($stmt);
+	$q->execute(array($id, $game));
+	$result = $q->setFetchMode(PDO::FETCH_ASSOC);
+	$result = $q->fetch();
+
+	if (empty($result)) {
+		http_response_code(403);
+		exit();
+	}
 }
 
 ?>

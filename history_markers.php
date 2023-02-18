@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 require 'db.php';
 require 'check_password.php';
 require 'check_admin.php';
-require 'utils.php';
+require_once 'utils.php';
 
 # get markers only if last_activity < 10 minutes
 $update_age = 60 * 10;

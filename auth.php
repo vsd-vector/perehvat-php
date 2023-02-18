@@ -1,6 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');  
 require 'db.php';
+require_once 'utils.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start(array("cookie_samesite"=>"none", "cookie_secure"=>"1"));
@@ -8,10 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$_SESSION["user"] = array("type" => "admin");
 	}
 } else {
-	if ( !empty($_COOKIE["PHPSESSID"]) ) {
-		session_start();
-		echo json_encode($_SESSION["user"]);
-	} else {		
-		echo json_encode(array("type" => "guest"));
-	}
+    $user = check_super_admin();
+	echo json_encode($user);	
 }

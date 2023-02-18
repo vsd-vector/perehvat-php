@@ -104,4 +104,15 @@ function calculate_average_speed($lat1, $lon1, $lat2, $lon2, $age) {
   return $speed_kph;
 }
 
+function check_super_admin() {
+  if ( !empty($_COOKIE["PHPSESSID"]) ) {
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+    return $_SESSION["user"];
+  } else {    
+    return array("type" => "guest");
+  }
+}
+
 ?>

@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 header('Access-Control-Allow-Origin: *');  
 require 'db.php';
-require 'utils.php';
+require_once 'utils.php';
 if ($_GET["password"] !== $history_password) {
   die ("Wrong password");
 }

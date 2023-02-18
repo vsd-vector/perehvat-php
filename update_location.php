@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 require 'db.php';
 require 'check_password.php';
-require 'utils.php';
+require_once 'utils.php';
 
 $dt = now_time();
 $now_time = $dt->format("Y-m-d H:i:s");

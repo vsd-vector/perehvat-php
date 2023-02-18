@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin: *');  
 require 'db.php';
 require 'check_password.php';
-require 'utils.php';
+require_once 'utils.php';
 
 # get markers only if last_activity < 10 minutes
 $update_age = 60 * 10;
@@ -33,7 +33,7 @@ if($my_info['updated'] == '0') {
 if(empty($blocked)) {		
     $game_info = get_game_info($_GET["game"]);
 
-	if ($my_info['is_prey'] == '1' && $game_info["state"] == "inprogress") {
+	if ($my_info['is_prey'] == '1' && $game_info["state"] !== "waiting") {
 		$stmt = "SELECT id, user_name, color, geolocation_lat, geolocation_lng, TIME_TO_SEC(TIMEDIFF(?, last_activity)) AS last_activity, 
 		                ROUND(speed, 1) as speed, is_prey, accuracy 
 		         FROM markers M 
